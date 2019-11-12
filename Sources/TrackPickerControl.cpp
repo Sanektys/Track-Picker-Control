@@ -201,8 +201,9 @@ void __fastcall TConceptForm::ForwardButtonMouseDown(TObject *Sender, TMouseButt
 	StateMovementText->Text = "GOFORWARD";
     #endif
     try
+
     {
-        command = TEncoding::UTF8->GetBytes("1");
+        command = TEncoding::UTF8->GetBytes(1);
     	Socket->SendData(command);
     }
     catch (Exception &Except)
@@ -225,7 +226,8 @@ void __fastcall TConceptForm::BackwardButtonMouseDown(TObject *Sender, TMouseBut
     #endif
     try
     {
-		Socket->SendData(TEncoding::UTF8->GetBytes(2));
+		command = TEncoding::UTF8->GetBytes(2);
+    	Socket->SendData(command);
     }
     catch (Exception &Except)
     {
@@ -247,7 +249,8 @@ void __fastcall TConceptForm::LeftButtonMouseDown(TObject *Sender, TMouseButton 
     #endif
     try
     {
-		Socket->SendData(TEncoding::UTF8->GetBytes(3));
+		command = TEncoding::UTF8->GetBytes(3);
+    	Socket->SendData(command);
     }
     catch (Exception &Except)
     {
@@ -269,7 +272,8 @@ void __fastcall TConceptForm::RightButtonMouseDown(TObject *Sender, TMouseButton
     #endif
     try
     {
-		Socket->SendData(TEncoding::UTF8->GetBytes(4));
+		command = TEncoding::UTF8->GetBytes(4);
+    	Socket->SendData(command);
     }
     catch (Exception &Except)
     {
@@ -293,7 +297,7 @@ void __fastcall TConceptForm::ButtonMouseUp(TObject *Sender, TMouseButton Button
     #endif
     try
     {
-        command = TEncoding::UTF8->GetBytes("0");
+        command = TEncoding::UTF8->GetBytes(0);
 		Socket->SendData(command);
     }
     catch (Exception &Except)
@@ -357,17 +361,17 @@ void __fastcall TConceptForm::FormKeyUp(TObject *Sender, WORD &Key, System::Wide
 
 void __fastcall TConceptForm::OpacityTimerTimer(TObject *Sender)
 {
-    /*if (Socket != NULL)
+    if (Socket != NULL && Socket->Connected)
     {
         try 
         {
-        	Socket->SendData(115);
+        	Socket->Connected;
         }
         catch (Exception &Except) 
         {
         	Socket->Close();
         }
-    }*/
+    }
     #ifdef ANDROID
 	ForwardButton->Opacity = 0;
 	BackwardButton->Opacity = 0;
@@ -664,8 +668,8 @@ void __fastcall TConceptForm::GetButtonClick(TObject *Sender)
 {
     try
     {
-        command = TEncoding::UTF8->GetBytes("load");
-		Socket->SendData(command);
+        command = TEncoding::UTF8->GetBytes(10);
+    	Socket->SendData(command);
         DisabledControls(this);
         LoadingTimer->Enabled = true;
     }
@@ -686,7 +690,7 @@ void __fastcall TConceptForm::LoadingTimerTimer(TObject *Sender)
 {
     try
     {
-        if (Socket->ReceiveData(200) == 0)
+        if (Socket->ReceiveData(2) == TEncoding::UTF8->GetBytes(100))
         {
             EnabledControls(this);
             LoadingTimer->Enabled = false;
